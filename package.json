@@ -1,0 +1,48 @@
+{
+  "name": "fastify-workshop",
+  "version": "0.0.1",
+  "description": "Fastify workshop 101",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "infra:up": "docker-compose up -d",
+    "infra:down": "docker-compose down",
+    "db:migrate": "postgrator",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup-node --format esm && fix-esm-import-path dist",
+    "start": "node --env-file=.env dist/index.js",
+    "dev": "FASTIFY_AUTOLOAD_TYPESCRIPT=1 node --import tsx --inspect --watch --env-file=.env src src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Puppo/fastify-workshop.git"
+  },
+  "keywords": [
+    "fastify",
+    "node",
+    "js",
+    "ts",
+    "rest",
+    "api"
+  ],
+  "author": "Luca Del Puppo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Puppo/fastify-workshop/issues"
+  },
+  "homepage": "https://github.com/Puppo/fastify-workshop#readme",
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "fix-esm-import-path": "^1.5.0",
+    "postgrator": "^7.2.0",
+    "postgrator-cli": "^7.0.0",
+    "tiny-glob": "^0.2.9",
+    "tsup": "^8.0.2",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "fastify": "^4.26.1",
+    "pg": "^8.11.3"
+  }
+}
