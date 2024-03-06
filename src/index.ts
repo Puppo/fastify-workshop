@@ -1,10 +1,9 @@
 import fastify from 'fastify';
+import server from './server';
 
 async function run() {
   const app = fastify({ logger: true });
-
-  app.get('/', () => ({ hello: 'world' }));
-
+  app.register(server);
   try {
     await app.listen({
       port: 3000,
