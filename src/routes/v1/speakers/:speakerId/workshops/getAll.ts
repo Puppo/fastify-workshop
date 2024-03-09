@@ -1,21 +1,29 @@
-import {FastifyPluginAsync} from "fastify";
+import {FastifyPluginAsyncTypebox} from "@fastify/type-provider-typebox";
 import db from "../../../../../db";
-import type {commons, speakers, workshops} from "../../../../../dto/index";
+import {commons, speakers, workshops} from "../../../../../dto/index";
 
-const plugin: FastifyPluginAsync = async (fastify): Promise<void> => {
-  fastify.get<{
-    Params: speakers.SpeakerIdParam,
-    Querystring: commons.Pagination,
-    Reply: workshops.WorkshopPaginatedResult
-  }>('/', (request) => {
-    const {limit = 100, offset = 0} = request.query;
+const plugin: FastifyPluginAsyncTypebox = async (fastify): Promise<void> => {
+  fastify.get('/', {
+    schema: {
+      params: speakers.SpeakerIdParam,
+      querystring: commons.Pagination,
+      response: {
+        200: workshops.WorkshopPaginatedResult
+      }
+    }
+  }, (request) => {
+    const {limit, offset} = request.query;
     const {speakerId} = request.params;
     const data = db.workshops
       .filter(w => w.speakerId === speakerId)
-      .slice(offset, offset + limit);
+      .slice(offset, offset! + limit!);
     return {
       count: db.workshops.length,
-      data
+      data: data.map(w => ({
+        ...w,
+        startTime: w.startTime.toISOString(),
+        endTime: w.endTime.toISOString()
+      }))
     };
   });
 };

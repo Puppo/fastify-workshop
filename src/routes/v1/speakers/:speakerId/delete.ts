@@ -1,12 +1,16 @@
-import {FastifyPluginAsync} from "fastify";
+import {FastifyPluginAsyncTypebox} from "@fastify/type-provider-typebox";
 import db from "../../../../db";
-import type {speakers} from '../../../../dto/index';
+import {speakers} from '../../../../dto/index';
 
-const plugin: FastifyPluginAsync = async (fastify): Promise<void> => {
-  fastify.delete<{
-    Params: speakers.SpeakerIdParam,
-    Reply: speakers.SpeakerDTO
-  }>('/', (request) => {
+const plugin: FastifyPluginAsyncTypebox = async (fastify): Promise<void> => {
+  fastify.delete('/', {
+    schema: {
+      params: speakers.SpeakerIdParam,
+      response: {
+        200: speakers.SpeakerDTO
+      }
+    }
+  }, (request) => {
     const {speakerId} = request.params;
     const speakerIndex = db.speakers
       .findIndex((speaker) => speaker.id === speakerId);

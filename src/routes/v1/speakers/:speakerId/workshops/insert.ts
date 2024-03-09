@@ -1,24 +1,31 @@
-import {randomUUID} from 'crypto';
-import {FastifyPluginAsync} from "fastify";
+import {FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import db, {Workshop} from "../../../../../db";
-import type {speakers, workshops} from "../../../../../dto/index";
+import {speakers, workshops} from "../../../../../dto/index";
 
-const plugin: FastifyPluginAsync = async (fastify): Promise<void> => {
-  fastify.post<{
-    Params: speakers.SpeakerIdParam,
-    Body: workshops.WorkshopInsertBody,
-    Reply: workshops.WorkshopDTO
-  }>('/', (request, response) => {
+const plugin: FastifyPluginAsyncTypebox = async (fastify): Promise<void> => {
+  fastify.post('/', {
+    schema: {
+      params: speakers.SpeakerIdParam,
+      body: workshops.WorkshopInsertBody,
+      response: {
+        201: workshops.WorkshopDTO
+      }
+    }
+  },(request, response) => {
     const workshop: Workshop = {
       ...request.body,
-      id: randomUUID(),
+      id: Math.max(...db.workshops.map(w => w.id)) + 1,
       speakerId: request.params.speakerId,
       startTime: new Date(request.body.startTime),
       endTime: new Date(request.body.endTime)
     };
     db.workshops.push(workshop);
     response.code(201);
-    return workshop;
+    return {
+      ...workshop,
+      startTime: workshop.startTime.toISOString(),
+      endTime: workshop.endTime.toISOString()
+    };
   });
 };
 

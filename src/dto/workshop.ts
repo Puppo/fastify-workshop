@@ -1,16 +1,21 @@
-import {PaginatedResult} from "./commons";
+import {Type} from '@sinclair/typebox';
+import {PaginatedResult} from './commons';
+import {SpeakerIdParam} from './speaker';
 
-export type WorkshopDTO = {
-  id: string;
-  title: string;
-  description: string;
-  startTime: Date;
-  endTime: Date;
-}
+export const WorkshopDTO = Type.Object({
+  id: Type.Number(),
+  title: Type.String({minLength: 1}),
+  description: Type.String(),
+  startTime: Type.String({format: 'date-time'}),
+  endTime: Type.String({format: 'date-time'}),
+});
 
-export type WorkshopIdParam = {
-  workshopId: WorkshopDTO['id'];
-};
-export type WorkshopInsertBody = Omit<WorkshopDTO, 'id'>
-export type WorkshopUpdateBody = Partial<Omit<WorkshopDTO, 'id'>>
-export type WorkshopPaginatedResult = PaginatedResult<WorkshopDTO>
+export const WorkshopIdParam = Type.Intersect([
+  SpeakerIdParam,
+  Type.Object({
+    workshopId: Type.Number()
+  }),
+]);
+export const WorkshopInsertBody = Type.Omit(WorkshopDTO, ['id']);
+export const WorkshopUpdateBody = Type.Partial(WorkshopDTO);
+export const WorkshopPaginatedResult = PaginatedResult(WorkshopDTO);

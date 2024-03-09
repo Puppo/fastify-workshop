@@ -1,14 +1,18 @@
-import {FastifyPluginAsync} from "fastify";
+import {FastifyPluginAsyncTypebox} from "@fastify/type-provider-typebox";
 import db from "../../../db";
-import type {commons, speakers} from '../../../dto/index';
+import {commons, speakers} from '../../../dto/index';
 
-const plugin: FastifyPluginAsync = async (fastify): Promise<void> => {
-  fastify.get<{
-    Querystring: commons.Pagination,
-    Reply: speakers.SpeakerPaginatedResult
-  }>('/', (request) => {
-    const {limit = 100, offset = 0} = request.query;
-    const data = db.speakers.slice(offset, offset + limit);
+const plugin: FastifyPluginAsyncTypebox = async (fastify): Promise<void> => {
+  fastify.get('/', {
+    schema: {
+      querystring: commons.Pagination,
+      response: {
+        200: speakers.SpeakerPaginatedResult
+      }
+    }
+  }, (request) => {
+    const {limit, offset} = request.query;
+    const data = db.speakers.slice(offset, offset! + limit!);
     return {
       count: db.speakers.length,
       data

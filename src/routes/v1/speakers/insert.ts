@@ -1,15 +1,18 @@
-import {randomUUID} from 'crypto';
-import {FastifyPluginAsync} from "fastify";
+import {FastifyPluginAsyncTypebox} from "@fastify/type-provider-typebox";
 import db, {Speaker} from "../../../db";
-import type {speakers} from '../../../dto/index';
+import {speakers} from '../../../dto/index';
 
-const plugin: FastifyPluginAsync = async (fastify): Promise<void> => {
-  fastify.post<{
-    Body: speakers.SpeakerInsertBody,
-    Reply: speakers.SpeakerDTO
-  }>('/', (request, response) => {
+const plugin: FastifyPluginAsyncTypebox = async (fastify): Promise<void> => {
+  fastify.post('/', {
+    schema: {
+      body: speakers.SpeakerInsertBody,
+      response: {
+        201: speakers.SpeakerDTO
+      }
+    }
+  }, (request, response) => {
     const speaker: Speaker = {
-      id: randomUUID(),
+      id: Math.max(...db.speakers.map(s => s.id)) + 1,
       ...request.body
     };
     db.speakers.push(speaker);
