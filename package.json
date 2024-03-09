@@ -33,6 +33,7 @@
   "homepage": "https://github.com/Puppo/fastify-workshop#readme",
   "devDependencies": {
     "@types/node": "^20.11.24",
+    "@types/pg": "^8.11.2",
     "fix-esm-import-path": "^1.5.0",
     "postgrator": "^7.2.0",
     "postgrator-cli": "^7.0.0",
@@ -43,6 +44,7 @@
   },
   "dependencies": {
     "@fastify/autoload": "^5.8.0",
+    "@fastify/postgres": "^5.2.2",
     "@fastify/sensible": "^5.5.0",
     "@fastify/type-provider-typebox": "^4.0.0",
     "@sinclair/typebox": "^0.32.15",

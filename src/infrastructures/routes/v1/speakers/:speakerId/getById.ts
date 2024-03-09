@@ -1,5 +1,4 @@
 import {FastifyPluginAsyncTypebox} from "@fastify/type-provider-typebox";
-import db from "../../../../db";
 import {speakers} from '../../../../dto/index';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify): Promise<void> => {
@@ -10,15 +9,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify): Promise<void> => {
         200: speakers.SpeakerDTO
       }
     }
-  },(request) => {
-    const {speakerId} = request.params;
-    const speaker = db.speakers
-      .find((speaker) => speaker.id === speakerId);
-    if (!speaker)
-      throw fastify.httpErrors.notFound();
-
-    return speaker;
-  });
+  }, (request) => fastify.speakerService.getSpeakerById(request.params.speakerId));
 };
 
 export default plugin;

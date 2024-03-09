@@ -1,5 +1,5 @@
 import fastify from 'fastify';
-import server from './server';
+import server from './infrastructures/index';
 
 async function run() {
   const app = fastify({ logger: true });
