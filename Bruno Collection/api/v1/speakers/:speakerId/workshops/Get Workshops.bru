@@ -1,0 +1,19 @@
+meta {
+  name: Get Workshops
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{HOST}}/speakers/d3b3b3e3-4e3e-4e3e-9e3e-3b3e3b3e3b3e/workshops
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Speaker Test",
+    "email": "speaker@test.it",
+    "bio": "I'm a great speaker"
+  }
+}

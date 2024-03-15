@@ -1,0 +1,20 @@
+meta {
+  name: Insert Workshop
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{HOST}}/speakers/d3b3b3e3-4e3e-4e3e-9e3e-3b3e3b3e3b3e/workshops
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Introduction to NodeJs",
+    "description": "Learn the basics of Fastify",
+    "startTime": "2021-10-10T10:00:00.000Z",
+    "endTime": "2021-10-10T12:00:00.000Z"
+  }
+}
