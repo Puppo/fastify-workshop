@@ -12,7 +12,7 @@ Good luck!
 
 ## Prerequisites
 
-- Node 18.x or later
+- Node 20.x or later
 - Docker
 - Docker Compose
 - Git
